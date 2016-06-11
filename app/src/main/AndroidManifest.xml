@@ -14,7 +14,6 @@
         >
         <activity
             android:name=".login.ui.LoginActivity"
-            android:noHistory="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +24,7 @@
         <activity
             android:name=".contactlist.ui.ContactListActivity"
             android:label="@string/contact_list.title"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" android:parentActivityName=".login.ui.LoginActivity" />
         <activity
             android:name=".chat.ui.ChatActivity"
             android:theme="@style/AppTheme.NoActionBar"

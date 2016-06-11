@@ -3,12 +3,10 @@ package edu.galileo.android.androidchat.signup.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -27,12 +25,8 @@ public class SignUpActivity extends AppCompatActivity implements LoginView {
     EditText inputEmail;
     @Bind(R.id.editTxtPassword)
     EditText inputPassword;
-    @Bind(R.id.wrapperPassword)
-    TextInputLayout wrapperPassword;
     @Bind(R.id.btnSignUp)
     Button btnSignUp;
-    @Bind(R.id.layoutButtons)
-    LinearLayout layoutButtons;
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
     @Bind(R.id.layoutMainContainer)
@@ -102,7 +96,9 @@ public class SignUpActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void navigateToMainScreen() {
-        startActivity(new Intent(this, ContactListActivity.class));
+        Intent intent = new Intent(this, ContactListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override

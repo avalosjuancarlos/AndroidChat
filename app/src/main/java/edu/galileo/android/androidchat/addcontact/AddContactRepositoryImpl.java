@@ -1,9 +1,9 @@
 package edu.galileo.android.androidchat.addcontact;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import edu.galileo.android.androidchat.addcontact.events.AddContactEvent;
 import edu.galileo.android.androidchat.domain.FirebaseHelper;
@@ -26,18 +26,18 @@ public class AddContactRepositoryImpl implements AddContactRepository {
     @Override
     public void addContact(final String email) {
         final String key = email.replace(".", "_");
-        Firebase userReference = helper.getUserReference(email);
+        DatabaseReference userReference = helper.getUserReference(email);
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if(user != null){
-                    Firebase myContactReference = helper.getMyContactsReference();
+                    DatabaseReference myContactReference = helper.getMyContactsReference();
                     myContactReference.child(key).setValue(user.isOnline());
 
                     String currentUserKey = helper.getAuthUserEmail();
                     currentUserKey = currentUserKey.replace(".", "_");
-                    Firebase reverseContactReference = helper.getContactsReference(email);
+                    DatabaseReference reverseContactReference = helper.getContactsReference(email);
                     reverseContactReference.child(currentUserKey).setValue(User.ONLINE);
 
                     postSuccess();
@@ -48,9 +48,7 @@ public class AddContactRepositoryImpl implements AddContactRepository {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                postError();
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 

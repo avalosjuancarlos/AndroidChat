@@ -1,10 +1,15 @@
 package edu.galileo.android.androidchat.login;
 
-import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import edu.galileo.android.androidchat.domain.FirebaseHelper;
 import edu.galileo.android.androidchat.entities.User;
@@ -16,50 +21,54 @@ import edu.galileo.android.androidchat.login.events.LoginEvent;
  * Created by avalo.
  */
 public class LoginRepositoryImpl implements LoginRepository {
+    private final FirebaseAuth authReference;
     private FirebaseHelper helper;
-    private Firebase dataReference;
-    private Firebase myUserReference;
+    private DatabaseReference myUserReference;
 
     public LoginRepositoryImpl() {
         this.helper = FirebaseHelper.getInstance();
-        this.dataReference = helper.getDataReference();
         this.myUserReference = helper.getMyUserReference();
+        this.authReference = FirebaseAuth.getInstance();
     }
 
     @Override
     public void signUp(final String email, final String password) {
-        dataReference.createUser(email, password, new Firebase.ResultHandler() {
-            @Override
-            public void onSuccess() {
-                postEvent(LoginEvent.onSignUpSuccess);
-                signIn(email, password);
-            }
-
-            @Override
-            public void onError(FirebaseError firebaseError) {
-                postEvent(LoginEvent.onSignUpError, firebaseError.getMessage());
-            }
-        });
+        authReference.createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        postEvent(LoginEvent.onSignUpSuccess);
+                        signIn(email, password);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        postEvent(LoginEvent.onSignUpError, e.getMessage());
+                    }
+                });
     }
 
     @Override
     public void signIn(String email, String password) {
-        dataReference.authWithPassword(email, password, new Firebase.AuthResultHandler() {
-            @Override
-            public void onAuthenticated(AuthData authData) {
-                initSignIn();
-            }
-
-            @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {
-                postEvent(LoginEvent.onSignInError, firebaseError.getMessage());
-            }
-        });
+        authReference.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        initSignIn();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        postEvent(LoginEvent.onSignInError, e.getMessage());
+                    }
+                });
     }
 
     @Override
     public void checkSession() {
-        if(dataReference.getAuth() != null){
+        if(authReference.getCurrentUser() != null){
             initSignIn();
         } else {
             postEvent(LoginEvent.onFailedToRecoverSession);
@@ -81,9 +90,7 @@ public class LoginRepositoryImpl implements LoginRepository {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 

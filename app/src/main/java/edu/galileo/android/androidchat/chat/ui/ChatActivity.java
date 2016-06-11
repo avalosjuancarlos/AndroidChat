@@ -56,11 +56,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
         setupRecyclerView();
 
         presenter = new chatPresenterImpl(this);
-        presenter.onCreate();
-
         setupToolbar(getIntent());
-
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        presenter.onCreate();
     }
 
     private void setupAdapter() {
@@ -88,6 +85,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
         imageLoader.load(imgAvatar, AvatarHelper.getAvatarUrl(recipient));
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override

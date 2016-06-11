@@ -1,8 +1,8 @@
 package edu.galileo.android.androidchat.contactlist;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import edu.galileo.android.androidchat.contactlist.events.ContactListEvent;
 import edu.galileo.android.androidchat.domain.FirebaseHelper;
@@ -65,14 +65,10 @@ public class ContactListRepositoryImpl implements ContactListRepository {
                 }
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
                 @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             };
         }
         helper.getMyContactsReference().addChildEventListener(contactEventListener);
@@ -81,7 +77,7 @@ public class ContactListRepositoryImpl implements ContactListRepository {
     private void handleContact(DataSnapshot dataSnapshot, int type) {
         String email = dataSnapshot.getKey();
         email = email.replace("_", ".");
-        boolean online = ((Boolean)dataSnapshot.getValue()).booleanValue();
+        boolean online = (Boolean) dataSnapshot.getValue();
         User user = new User();
         user.setEmail(email);
         user.setOnline(online);

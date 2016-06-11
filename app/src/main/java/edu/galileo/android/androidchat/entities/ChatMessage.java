@@ -1,14 +1,14 @@
 package edu.galileo.android.androidchat.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.firebase.database.Exclude;
 
 /**
  * Created by avalo.
  */
-@JsonIgnoreProperties({"SentByMe"})
 public class ChatMessage {
     private String msg;
     private String sender;
+    @Exclude
     private boolean sentByMe;
 
     public ChatMessage() {
