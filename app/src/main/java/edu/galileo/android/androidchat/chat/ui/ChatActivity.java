@@ -60,7 +60,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
 
         setupToolbar(getIntent());
 
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     private void setupAdapter() {
