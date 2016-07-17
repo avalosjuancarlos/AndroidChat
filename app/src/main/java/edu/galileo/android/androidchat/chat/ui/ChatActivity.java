@@ -12,14 +12,16 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import edu.galileo.android.androidchat.AndroidChatApplication;
 import edu.galileo.android.androidchat.R;
 import edu.galileo.android.androidchat.chat.ui.adapters.ChatAdapter;
 import edu.galileo.android.androidchat.chat.ChatPresenter;
-import edu.galileo.android.androidchat.chat.chatPresenterImpl;
 import edu.galileo.android.androidchat.domain.AvatarHelper;
 import edu.galileo.android.androidchat.entities.ChatMessage;
 import edu.galileo.android.androidchat.lib.GlideImageLoader;
@@ -27,21 +29,25 @@ import edu.galileo.android.androidchat.lib.ImageLoader;
 
 public class ChatActivity extends AppCompatActivity implements ChatView {
 
-    @Bind(R.id.imgAvatar)
+    @BindView(R.id.imgAvatar)
     CircleImageView imgAvatar;
-    @Bind(R.id.txtUser)
+    @BindView(R.id.txtUser)
     TextView txtUser;
-    @Bind(R.id.txtStatus)
+    @BindView(R.id.txtStatus)
     TextView txtStatus;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.messageRecyclerView)
+    @BindView(R.id.messageRecyclerView)
     RecyclerView messageRecyclerView;
-    @Bind(R.id.editTxtMessage)
+    @BindView(R.id.editTxtMessage)
     EditText editTxtMessage;
 
-    private ChatAdapter adapter;
-    private ChatPresenter presenter;
+    @Inject
+    ChatPresenter presenter;
+
+    @Inject
+    ChatAdapter adapter;
+    //private ChatAdapter adapter;
 
     public static final String EMAIL_KEY = "email";
     public static final String ONLINE_KEY = "online";
@@ -52,20 +58,19 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
-        setupAdapter();
+        //adapter = new ChatAdapter(this, new ArrayList<ChatMessage>());
+
+        setupInjection();
+
+
         setupRecyclerView();
-
-        presenter = new chatPresenterImpl(this);
         presenter.onCreate();
-
         setupToolbar(getIntent());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    private void setupAdapter() {
-        adapter = new ChatAdapter(this, new ArrayList<ChatMessage>());
+    private void setupInjection() {
+        AndroidChatApplication app = (AndroidChatApplication) getApplication();
+        app.getChatComponent(this, this).inject(this);
     }
 
     private void setupRecyclerView() {
@@ -89,6 +94,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
         imageLoader.load(imgAvatar, AvatarHelper.getAvatarUrl(recipient));
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override

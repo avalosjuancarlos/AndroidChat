@@ -9,31 +9,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
+import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.galileo.android.androidchat.AndroidChatApplication;
 import edu.galileo.android.androidchat.R;
 import edu.galileo.android.androidchat.addcontact.ui.AddContactFragment;
 import edu.galileo.android.androidchat.chat.ui.ChatActivity;
 import edu.galileo.android.androidchat.contactlist.ContactListPresenter;
-import edu.galileo.android.androidchat.contactlist.ContactListPresenterImpl;
 import edu.galileo.android.androidchat.contactlist.ui.adapters.ContactListAdapter;
 import edu.galileo.android.androidchat.contactlist.ui.adapters.OnItemClickListener;
 import edu.galileo.android.androidchat.entities.User;
-import edu.galileo.android.androidchat.lib.GlideImageLoader;
-import edu.galileo.android.androidchat.lib.ImageLoader;
 import edu.galileo.android.androidchat.login.ui.LoginActivity;
 
 public class ContactListActivity extends AppCompatActivity implements ContactListView, OnItemClickListener {
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.recyclerViewContacts)
+    @BindView(R.id.recyclerViewContacts)
     RecyclerView recyclerViewContacts;
-    private ContactListPresenter presenter;
-    private ContactListAdapter adapter;
+
+    @Inject
+    ContactListPresenter presenter;
+    @Inject
+    ContactListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +42,16 @@ public class ContactListActivity extends AppCompatActivity implements ContactLis
         setContentView(R.layout.activity_contact_list);
         ButterKnife.bind(this);
 
-        setupAdapter();
+        setupInjection();
+
         setupRecyclerView();
-        presenter = new ContactListPresenterImpl(this);
         presenter.onCreate();
         setupToolbar();
+    }
+
+    private void setupInjection() {
+        AndroidChatApplication app = (AndroidChatApplication) getApplication();
+        app.getContactListComponent(this, this).inject(this);
     }
 
     @Override
@@ -65,11 +71,6 @@ public class ContactListActivity extends AppCompatActivity implements ContactLis
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setupAdapter() {
-        ImageLoader imageLoader = new GlideImageLoader(this.getApplicationContext());
-        adapter = new ContactListAdapter(new ArrayList<User>(), imageLoader, this);
     }
 
     private void setupRecyclerView() {

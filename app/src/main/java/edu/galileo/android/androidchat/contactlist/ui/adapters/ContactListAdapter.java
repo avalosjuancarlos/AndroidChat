@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.galileo.android.androidchat.R;
@@ -83,11 +83,11 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.imgAvatar)
+        @BindView(R.id.imgAvatar)
         CircleImageView imgAvatar;
-        @Bind(R.id.txtUser)
+        @BindView(R.id.txtUser)
         TextView txtUser;
-        @Bind(R.id.txtStatus)
+        @BindView(R.id.txtStatus)
         TextView txtStatus;
 
         public ViewHolder(View itemView) {

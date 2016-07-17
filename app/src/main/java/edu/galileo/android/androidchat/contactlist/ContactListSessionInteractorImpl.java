@@ -4,10 +4,10 @@ package edu.galileo.android.androidchat.contactlist;
  * Created by avalo.
  */
 public class ContactListSessionInteractorImpl implements ContactListSessionInteractor {
-    ContactListRepository repository;
+    private ContactListRepository repository;
 
-    public ContactListSessionInteractorImpl() {
-        repository = new ContactListRepositoryImpl();
+    public ContactListSessionInteractorImpl(ContactListRepository repository) {
+        this.repository = repository;
     }
 
     @Override

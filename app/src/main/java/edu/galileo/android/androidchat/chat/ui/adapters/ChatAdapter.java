@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.galileo.android.androidchat.R;
 import edu.galileo.android.androidchat.entities.ChatMessage;
@@ -79,7 +79,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.txtMessage)
+        @BindView(R.id.txtMessage)
         TextView txtMessage;
 
         public ViewHolder(View itemView) {

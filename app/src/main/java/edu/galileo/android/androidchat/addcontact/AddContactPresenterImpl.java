@@ -5,7 +5,6 @@ import org.greenrobot.eventbus.Subscribe;
 import edu.galileo.android.androidchat.addcontact.events.AddContactEvent;
 import edu.galileo.android.androidchat.addcontact.ui.AddContactView;
 import edu.galileo.android.androidchat.lib.EventBus;
-import edu.galileo.android.androidchat.lib.GreenRobotEventBus;
 
 /**
  * Created by avalo.
@@ -15,10 +14,10 @@ public class AddContactPresenterImpl implements AddContactPresenter {
     private AddContactView view;
     private AddContactInteractor interactor;
 
-    public AddContactPresenterImpl(AddContactView view) {
+    public AddContactPresenterImpl(AddContactView view, EventBus eventBus, AddContactInteractor interactor) {
         this.view = view;
-        this.eventBus = GreenRobotEventBus.getInstance();
-        this.interactor = new AddContactInteractorImpl();
+        this.eventBus = eventBus;
+        this.interactor = interactor;
     }
 
     @Override

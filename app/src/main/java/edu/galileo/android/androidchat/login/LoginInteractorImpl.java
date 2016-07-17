@@ -6,8 +6,8 @@ package edu.galileo.android.androidchat.login;
 public class LoginInteractorImpl implements LoginInteractor {
     private LoginRepository loginRepository;
 
-    public LoginInteractorImpl() {
-        loginRepository = new LoginRepositoryImpl();
+    public LoginInteractorImpl(LoginRepository loginRepository) {
+        this.loginRepository = loginRepository;
     }
 
     @Override

@@ -1,17 +1,28 @@
 package edu.galileo.android.androidchat.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.firebase.database.Exclude;
 
 /**
  * Created by avalo.
  */
-@JsonIgnoreProperties({"SentByMe"})
 public class ChatMessage {
     private String msg;
     private String sender;
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    private long timestamp;
+    @Exclude
     private boolean sentByMe;
 
     public ChatMessage() {
+        this.timestamp = System.currentTimeMillis()/1000;
     }
 
     public String getMsg() {
@@ -44,7 +55,10 @@ public class ChatMessage {
 
         if(object instanceof  ChatMessage){
             ChatMessage msg = (ChatMessage) object;
-            equal = this.sender.equals(msg.getSender()) && this.msg.equals(msg.getMsg()) && this.sentByMe == msg.isSentByMe();
+            equal = this.sender.equals(msg.getSender())
+                    && this.msg.equals(msg.getMsg())
+                    && this.sentByMe == msg.isSentByMe()
+                    && this.timestamp == msg.getTimestamp();
         }
 
         return equal;

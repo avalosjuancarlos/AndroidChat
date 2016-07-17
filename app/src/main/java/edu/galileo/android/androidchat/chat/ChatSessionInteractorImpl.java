@@ -6,8 +6,8 @@ package edu.galileo.android.androidchat.chat;
 public class ChatSessionInteractorImpl implements ChatSessionInteractor {
     ChatRepository repository;
 
-    public ChatSessionInteractorImpl() {
-        this.repository = new ChatRepositoryImpl();
+    public ChatSessionInteractorImpl(ChatRepository repository) {
+        this.repository = repository;
     }
 
     @Override

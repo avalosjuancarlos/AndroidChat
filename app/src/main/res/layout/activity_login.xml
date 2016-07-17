@@ -51,13 +51,13 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/login.button.sign_in"
             android:id="@+id/btnSignIn"/>
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/login.button.goto_sign_up"
             android:id="@+id/btnSignUp"/>
     </LinearLayout>

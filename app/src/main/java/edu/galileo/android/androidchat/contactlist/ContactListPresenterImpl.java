@@ -17,11 +17,11 @@ public class ContactListPresenterImpl implements ContactListPresenter {
     private ContactListInteractor listInteractor;
     private ContactListSessionInteractor sessionInteractor;
 
-    public ContactListPresenterImpl(ContactListView view) {
+    public ContactListPresenterImpl(ContactListView view, EventBus eventBus, ContactListInteractor listInteractor, ContactListSessionInteractor sessionInteractor) {
         this.view = view;
-        eventBus = GreenRobotEventBus.getInstance();
-        this.listInteractor = new ContactListInteractorImpl();
-        this.sessionInteractor = new ContactListSessionInteractorImpl();
+        this.eventBus = eventBus;
+        this.listInteractor = listInteractor;
+        this.sessionInteractor = sessionInteractor;
     }
 
     @Override

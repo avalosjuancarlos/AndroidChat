@@ -6,8 +6,8 @@ package edu.galileo.android.androidchat.addcontact;
 public class AddContactInteractorImpl implements AddContactInteractor {
     AddContactRepository repository;
 
-    public AddContactInteractorImpl() {
-        this.repository = new AddContactRepositoryImpl();
+    public AddContactInteractorImpl(AddContactRepository repository) {
+        this.repository = repository;
     }
 
     @Override

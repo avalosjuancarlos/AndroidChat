@@ -3,42 +3,39 @@ package edu.galileo.android.androidchat.signup.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import butterknife.Bind;
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.galileo.android.androidchat.AndroidChatApplication;
 import edu.galileo.android.androidchat.R;
 import edu.galileo.android.androidchat.contactlist.ui.ContactListActivity;
 import edu.galileo.android.androidchat.login.LoginPresenter;
-import edu.galileo.android.androidchat.login.LoginPresenterImpl;
 import edu.galileo.android.androidchat.login.ui.LoginView;
 
 public class SignUpActivity extends AppCompatActivity implements LoginView {
 
-    @Bind(R.id.editTxtEmail)
+    @BindView(R.id.editTxtEmail)
     EditText inputEmail;
-    @Bind(R.id.editTxtPassword)
+    @BindView(R.id.editTxtPassword)
     EditText inputPassword;
-    @Bind(R.id.wrapperPassword)
-    TextInputLayout wrapperPassword;
-    @Bind(R.id.btnSignUp)
+    @BindView(R.id.btnSignUp)
     Button btnSignUp;
-    @Bind(R.id.layoutButtons)
-    LinearLayout layoutButtons;
-    @Bind(R.id.progressBar)
+    @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @Bind(R.id.layoutMainContainer)
+    @BindView(R.id.layoutMainContainer)
     RelativeLayout container;
 
-    private LoginPresenter loginPresenter;
+    @Inject
+    LoginPresenter loginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +45,12 @@ public class SignUpActivity extends AppCompatActivity implements LoginView {
 
         setTitle(getString(R.string.signup_title));
 
-        loginPresenter = new LoginPresenterImpl(this);
+        setupInjection();
+    }
+
+    private void setupInjection() {
+        AndroidChatApplication app = (AndroidChatApplication) getApplication();
+        app.getSignUpComponent(this).inject(this);
     }
 
     @Override
@@ -102,7 +104,9 @@ public class SignUpActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void navigateToMainScreen() {
-        startActivity(new Intent(this, ContactListActivity.class));
+        Intent intent = new Intent(this, ContactListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override

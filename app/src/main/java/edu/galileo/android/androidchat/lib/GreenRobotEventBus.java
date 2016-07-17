@@ -4,18 +4,10 @@ package edu.galileo.android.androidchat.lib;
  * Created by avalo.
  */
 public class GreenRobotEventBus implements EventBus {
-    org.greenrobot.eventbus.EventBus eventBus;
+    private org.greenrobot.eventbus.EventBus eventBus;
 
-    private static class SingletonHolder{
-        private static final GreenRobotEventBus INSTANCE = new GreenRobotEventBus();
-    }
-
-    public static GreenRobotEventBus getInstance(){
-        return SingletonHolder.INSTANCE;
-    }
-
-    public GreenRobotEventBus() {
-        eventBus = org.greenrobot.eventbus.EventBus.getDefault();
+    public GreenRobotEventBus(org.greenrobot.eventbus.EventBus eventBus) {
+        this.eventBus = eventBus;
     }
 
     @Override

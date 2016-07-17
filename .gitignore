@@ -6,4 +6,5 @@
 .DS_Store
 /build
 /captures
-app/google-services.json
+/app/google-services.json
+/gradle.properties

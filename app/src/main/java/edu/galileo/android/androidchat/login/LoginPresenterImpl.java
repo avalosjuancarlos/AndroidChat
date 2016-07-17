@@ -15,10 +15,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
     private LoginInteractor loginInteractor;
 
-    public LoginPresenterImpl(LoginView loginView) {
+    public LoginPresenterImpl(LoginView loginView, LoginInteractor loginInteractor, EventBus eventBus) {
         this.loginView = loginView;
-        this.loginInteractor = new LoginInteractorImpl();
-        this.eventBus = GreenRobotEventBus.getInstance();
+        this.loginInteractor = loginInteractor;
+        this.eventBus = eventBus;
     }
 
     @Override

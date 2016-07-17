@@ -1,15 +1,14 @@
 package edu.galileo.android.androidchat.chat;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import edu.galileo.android.androidchat.chat.events.ChatEvent;
 import edu.galileo.android.androidchat.domain.FirebaseHelper;
 import edu.galileo.android.androidchat.entities.ChatMessage;
 import edu.galileo.android.androidchat.lib.EventBus;
-import edu.galileo.android.androidchat.lib.GreenRobotEventBus;
 
 /**
  * Created by avalo.
@@ -20,9 +19,9 @@ public class ChatRepositoryImpl implements ChatRepository {
     private FirebaseHelper helper;
     private ChildEventListener chatEventListener;
 
-    public ChatRepositoryImpl() {
-        this.eventBus = GreenRobotEventBus.getInstance();
-        this.helper = FirebaseHelper.getInstance();
+    public ChatRepositoryImpl(EventBus eventBus, FirebaseHelper helper) {
+        this.eventBus = eventBus;
+        this.helper = helper;
     }
 
     @Override
@@ -31,13 +30,17 @@ public class ChatRepositoryImpl implements ChatRepository {
         chatMessage.setSender(helper.getAuthUserEmail());
         chatMessage.setMsg(msg);
 
-        Firebase chatsReference = helper.getChatsReference(recipient);
+        DatabaseReference chatsReference = helper.getChatsReference(recipient);
         chatsReference.push().setValue(chatMessage);
+
+        helper.sendNotificationTopic(recipient, msg); // Push notification
     }
 
     @Override
     public void setRecipient(String recipient) {
         this.recipient = recipient;
+
+        helper.subscribeToTopic(recipient); // Notification topic
     }
 
     @Override
@@ -57,24 +60,16 @@ public class ChatRepositoryImpl implements ChatRepository {
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
                 @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
                 @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             };
         }
 

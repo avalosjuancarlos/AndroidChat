@@ -14,8 +14,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import butterknife.Bind;
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.galileo.android.androidchat.AndroidChatApplication;
 import edu.galileo.android.androidchat.R;
 import edu.galileo.android.androidchat.addcontact.AddContactPresenter;
 import edu.galileo.android.androidchat.addcontact.AddContactPresenterImpl;
@@ -26,19 +29,27 @@ import edu.galileo.android.androidchat.addcontact.AddContactPresenterImpl;
 public class AddContactFragment extends DialogFragment implements AddContactView, DialogInterface.OnShowListener {
 
 
-    @Bind(R.id.editTxtEmail)
+    @BindView(R.id.editTxtEmail)
     EditText editTxtEmail;
-    @Bind(R.id.progressBar)
+    @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    private AddContactPresenter presenter;
+
+    @Inject
+    AddContactPresenter presenter;
 
     public AddContactFragment() {
-        presenter = new AddContactPresenterImpl(this);
+    }
+
+    private void setupInjection() {
+        AndroidChatApplication app = (AndroidChatApplication) getActivity().getApplication();
+        app.getAddContactComponent(this).inject(this);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        setupInjection();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.addcontact_message_title)
                 .setPositiveButton(R.string.addcontact_message_add, new DialogInterface.OnClickListener() {
@@ -97,7 +108,7 @@ public class AddContactFragment extends DialogFragment implements AddContactView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        //ButterKnife.unbind(this);
     }
 
     @Override
