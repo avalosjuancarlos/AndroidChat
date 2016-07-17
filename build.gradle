@@ -35,7 +35,7 @@ ext {
 
     supportLibraryVersion = '24.0.0'
 
-    firebaseVersion = '9.2.0'
+    firebaseVersion = '9.2.1'
     circleImageViewVersion = '2.1.0'
     butterknifeVersion = '8.2.1'
     eventbusVersion = '3.0.0'
